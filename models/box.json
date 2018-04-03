@@ -1,0 +1,66 @@
+{
+    "points": [
+        {
+            "x": 0,
+            "y": 1,
+            "z": 0,
+            "key": "front-top-left"
+        },
+        {
+            "x": 1,
+            "y": 1,
+            "z": 0,
+            "key": "front-top-right"
+        },
+        {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "key": "front-bottom-left"
+        },
+        {
+            "x": 1,
+            "y": 0,
+            "z": 0,
+            "key": "front-bottom-right"
+        },
+        {
+            "x": 0,
+            "y": 1,
+            "z": 1,
+            "key": "back-top-left"
+        },
+        {
+            "x": 1,
+            "y": 1,
+            "z": 1,
+            "key": "back-top-right"
+        },
+        {
+            "x": 0,
+            "y": 0,
+            "z": 1,
+            "key": "back-bottom-left"
+        },
+        {
+            "x": 1,
+            "y": 0,
+            "z": 1,
+            "key": "back-bottom-right"
+        }
+    ],
+    "lines": [
+        {"vertex1": "front-top-left", "vertex2": "front-bottom-left"},
+        {"vertex1": "front-top-left", "vertex2": "front-top-right"},
+        {"vertex1": "front-top-left", "vertex2": "back-top-left"},
+        {"vertex1": "back-top-left", "vertex2": "back-bottom-left"},
+        {"vertex1": "back-top-left", "vertex2": "back-top-right"},
+        {"vertex1": "back-top-right", "vertex2": "back-bottom-right"},
+        {"vertex1": "back-top-right", "vertex2": "front-top-right"},
+        {"vertex1": "front-top-right", "vertex2": "front-bottom-right"},
+        {"vertex1": "front-bottom-right", "vertex2": "front-bottom-left"},
+        {"vertex1": "front-bottom-left", "vertex2": "back-bottom-left"},
+        {"vertex1": "back-bottom-left", "vertex2": "back-bottom-right"},
+        {"vertex1": "back-bottom-right", "vertex2": "front-bottom-right"}
+    ]
+}
