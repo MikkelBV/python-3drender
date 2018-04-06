@@ -29,7 +29,7 @@ class RenderTest (unittest.TestCase):
     def test_point_to_pixel_returns_ints(self):
         point = (11, 19, 2)
         expected_type = tuple
-        output = render.point_to_pixel(point)
+        output = render.point_to_pixel(point, (0, 0, 0))
         output_is_int = type(output[0]) is int and type(output[1]) is int
 
         self.assertEqual(type(output), expected_type)
@@ -44,7 +44,7 @@ class RenderTest (unittest.TestCase):
             int((render.WINDOW_HEIGHT / 2) - (render.FOCAL_LENGTH * y / z)),
             int((render.FOCAL_LENGTH * x / z) + render.WINDOW_WIDTH / 2)
         )
-        actual_output = render.point_to_pixel(point)
+        actual_output = render.point_to_pixel(point, (0, 0, 0))
 
         self.assertEqual(actual_output, expected_output)
 

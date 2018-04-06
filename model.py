@@ -24,6 +24,10 @@ class WorldObject:
 
         self._scale_points(scale, points)
 
+
+    def translate(self, position_change):
+        self._position = tuple(map(sum, zip(self._position, position_change)))
+
     
     def _scale_points(self, scalar, points):
         for point in points:
@@ -36,6 +40,10 @@ class WorldObject:
 
     def lines(self):
         return self._lines
+
+
+    def position(self):
+        return self._position
 
 
 def load_model(path_to_json_model):

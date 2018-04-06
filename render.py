@@ -18,11 +18,14 @@ def global_to_camera_point(point):
 
 
 def map_model_to_screen(world_object):
-    return [point_to_pixel(node.point()) for node in world_object.points()]
+    return [point_to_pixel(node.point(), world_object.position()) for node in world_object.points()]
 
 
-def point_to_pixel(point):
+def point_to_pixel(point, position):
     x, y, z = global_to_camera_point(point)
+    x += position[0]
+    y += position[1]
+    z += position[2]
 
     screen_x = (FOCAL_LENGTH * x / z) + WINDOW_WIDTH / 2
     screen_y = (WINDOW_HEIGHT / 2) - (FOCAL_LENGTH * y / z)
@@ -53,8 +56,8 @@ def draw_line(canvas, point1, point2, thickness = 1, color = COLOR_WHITE):
 
 def draw_world_object(canvas, world_object):
     for start, finish in world_object.lines():
-        y1, x1 = point_to_pixel(start.point())
-        y2, x2 = point_to_pixel(finish.point())
+        y1, x1 = point_to_pixel(start.point(), world_object.position())
+        y2, x2 = point_to_pixel(finish.point(), world_object.position())
         draw_line(canvas, (x1, y1), (x2, y2))
 
 
@@ -71,6 +74,8 @@ def start():
         shape = (WINDOW_HEIGHT, WINDOW_WIDTH),
         dtype = np.uint8 # unsigned integer 0-255 (grayscale)
     )
+    
+    box.translate((1, 0, 0))
 
     draw_points(canvas, map_model_to_screen(box))
     draw_world_object(canvas, box)
