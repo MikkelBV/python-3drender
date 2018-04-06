@@ -2,26 +2,26 @@ import unittest
 import cv2
 import numpy as np
 import json
-import render
+import engine
 import model
 from unittest.mock import patch
 
-class RenderTest (unittest.TestCase):
+class engineTest (unittest.TestCase):
 
     @patch("cv2.waitKey", return_value = 0)
     def test_it_runs(self, return_value):
         try:
-            render.start()
+            engine.start(lambda: None, lambda canvas: None)
         except:
             self.fail()
 
 
     def test_global_to_camera_point(self):
-        camx, camy, camz = render.CAMERA_POSITION
+        camx, camy, camz = engine.CAMERA_POSITION
         point = (-10, 10, -2)
         x, y, z = point
         expected_output = (x - camx, y - camy, z - camz)
-        actual_output = render.global_to_camera_point(point)
+        actual_output = engine.global_to_camera_point(point)
 
         self.assertEqual(actual_output, expected_output)
 
@@ -29,7 +29,7 @@ class RenderTest (unittest.TestCase):
     def test_point_to_pixel_returns_ints(self):
         point = (11, 19, 2)
         expected_type = tuple
-        output = render.point_to_pixel(point, (0, 0, 0))
+        output = engine.point_to_pixel(point, (0, 0, 0))
         output_is_int = type(output[0]) is int and type(output[1]) is int
 
         self.assertEqual(type(output), expected_type)
@@ -39,35 +39,35 @@ class RenderTest (unittest.TestCase):
     
     def test_correctly_maps_point_to_pixel(self):
         point = (-10, 10, -2)
-        x, y, z = render.global_to_camera_point(point)
+        x, y, z = engine.global_to_camera_point(point)
         expected_output = (
-            int((render.WINDOW_HEIGHT / 2) - (render.FOCAL_LENGTH * y / z)),
-            int((render.FOCAL_LENGTH * x / z) + render.WINDOW_WIDTH / 2)
+            int((engine.WINDOW_HEIGHT / 2) - (engine.FOCAL_LENGTH * y / z)),
+            int((engine.FOCAL_LENGTH * x / z) + engine.WINDOW_WIDTH / 2)
         )
-        actual_output = render.point_to_pixel(point, (0, 0, 0))
+        actual_output = engine.point_to_pixel(point, (0, 0, 0))
 
         self.assertEqual(actual_output, expected_output)
 
 
     def test_draw_runs(self):
         try: 
-            canvas = np.zeros((render.WINDOW_HEIGHT, render.WINDOW_WIDTH), np.uint8)
+            canvas = np.zeros((engine.WINDOW_HEIGHT, engine.WINDOW_WIDTH), np.uint8)
             points = [(0, 0), (1, 1), (2, 2)]
 
-            output = render.draw_points(canvas, points)
+            output = engine.draw_points(canvas, points)
         except:
             self.fail()
 
         
     def test_draw_points_right_numpoints(self):
-        canvas = np.zeros((render.WINDOW_HEIGHT, render.WINDOW_WIDTH), np.uint8)
+        canvas = np.zeros((engine.WINDOW_HEIGHT, engine.WINDOW_WIDTH), np.uint8)
         points = [(0, 0), (5, 0), (10, 0)]
-        render.draw_points(canvas, points)
+        engine.draw_points(canvas, points)
         num_whites = 0
         
-        for y in range(render.WINDOW_HEIGHT):
-            for x in range(render.WINDOW_WIDTH):
-                if canvas.item(y, x) == render.COLOR_WHITE:
+        for y in range(engine.WINDOW_HEIGHT):
+            for x in range(engine.WINDOW_WIDTH):
+                if canvas.item(y, x) == engine.COLOR_WHITE:
                     num_whites += 1
         
         self.assertEqual(num_whites, len(points))
@@ -78,8 +78,8 @@ class RenderTest (unittest.TestCase):
         point1 = (0, 0)
         point2 = (6, 6)
 
-        output1 = render.is_point_in_frame(canvas, point1)
-        output2 = render.is_point_in_frame(canvas, point2)
+        output1 = engine.is_point_in_frame(canvas, point1)
+        output2 = engine.is_point_in_frame(canvas, point2)
 
         self.assertTrue(output1)
         self.assertFalse(output2)
@@ -89,20 +89,20 @@ class RenderTest (unittest.TestCase):
         try:
             points = [(1, 1), (6, 6)]
             canvas = np.zeros((5, 5), np.uint8)
-            render.draw_points(canvas, points)
+            engine.draw_points(canvas, points)
         except:
             self.fail(msg = 'trying to draw outside frame')
 
 
     def test_draw_line(self):
         canvas = np.zeros((5, 5), np.uint8)
-        render.draw_line(canvas, (0, 0), (4, 0))
+        engine.draw_line(canvas, (0, 0), (4, 0))
         
         for i in range(len(canvas)):
             for j in range(i):
                 color = canvas.item(i, j)
                 if j < 5 and j > 0 and i == 0:
-                    self.assertEqual(color, render.COLOR_WHITE)
+                    self.assertEqual(color, engine.COLOR_WHITE)
                 else:
                     self.assertEqual(color, 0)
                 
@@ -115,16 +115,16 @@ class RenderTest (unittest.TestCase):
         ], [])
         
         expected_output = [(243, 517), (229, 508), (218, 515)]
-        actual_output = render.map_model_to_screen(world_object);
+        actual_output = engine.map_model_to_screen(world_object);
         
         self.assertEqual(actual_output, expected_output)
 
 
     def test_draw_world_object_runs(self):
         try:
-            canvas = np.zeros((render.WINDOW_HEIGHT, render.WINDOW_WIDTH), np.uint8)
+            canvas = np.zeros((engine.WINDOW_HEIGHT, engine.WINDOW_WIDTH), np.uint8)
             world_object = model.load_model('models/test.json')
-            render.draw_world_object(canvas, world_object)
+            engine.draw_world_object(canvas, world_object)
         except:
             self.fail(msg = 'could not call draw_world_object()')
         

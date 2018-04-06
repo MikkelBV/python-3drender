@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from model import load_model
+import time
 
 
 WINDOW_NAME = 'canvas'
@@ -61,31 +62,18 @@ def draw_world_object(canvas, world_object):
         draw_line(canvas, (x1, y1), (x2, y2))
 
 
-def start():
-    box = None
-
-    try:
-        box = load_model('models/box.json')
-    except:
-        print('file does not exist')
-        return None
-
+def start(loop):
     canvas = np.zeros(
         shape = (WINDOW_HEIGHT, WINDOW_WIDTH),
         dtype = np.uint8 # unsigned integer 0-255 (grayscale)
     )
-    
-    box.translate((1, 0, 0))
 
-    draw_points(canvas, map_model_to_screen(box))
-    draw_world_object(canvas, box)
-
-    # draw center
     canvas.itemset((int(WINDOW_HEIGHT / 2), int(WINDOW_WIDTH / 2)), COLOR_GRAY)
-
     cv2.startWindowThread()
     cv2.namedWindow(WINDOW_NAME)
-    cv2.imshow(WINDOW_NAME, canvas)
-    cv2.waitKey(0)
-    # https://stackoverflow.com/questions/5288536/how-to-change-3d-point-to-2d-pixel-location
-    # http://www.nh.cas.cz/people/lazar/celler/online_tools.php?start_vec=-10,%20-10,%2010&rot_ax=0,1,1&rot_ang=30
+
+    for i in range(10):
+        canvas[:] = 0
+        loop(canvas)
+        cv2.imshow(WINDOW_NAME, canvas)
+        cv2.waitKey(0)
