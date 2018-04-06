@@ -11,7 +11,7 @@ class engineTest (unittest.TestCase):
     @patch("cv2.waitKey", return_value = 0)
     def test_it_runs(self, return_value):
         try:
-            engine.start(lambda: None, lambda canvas: None)
+            engine.start(lambda canvas: None)
         except:
             self.fail()
 
