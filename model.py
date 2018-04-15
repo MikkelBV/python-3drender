@@ -1,7 +1,7 @@
 import json
 from pprint import pprint as pp
 
-class Node:
+class Vertex:
     def __init__(self, point, key):
         self._point = point
         self._key = key
@@ -15,34 +15,35 @@ class Node:
 
 
 class WorldObject:
-    def __init__(self, points, lines, position = (0, 0, 0), scale = 1, rotation = (0, 0 ,0)):        
+    def __init__(self, vertices, lines, position = (0, 0, 0), scale = 1, rotation = (0, 0 ,0)):        
         self._lines = lines
         self._position = position
         self._scale = scale
         self._rotation = rotation
-        self._points = points
+        self._vertices = vertices
 
         # scale the input points according to specified scale
-        self._scale_points(scale, points)
+        self._scale_vertices(scale, vertices)
 
 
-    def translate(self, position_change):
+    def translate(self, translation):
         x, y, z = self._position
-        movex, movey, movez = position_change
+        movex, movey, movez = translation
+
         self._position = (x + movex, y + movey, z + movez)
 
 
     def scale(self, scalar):
-        self._scale_points(scalar, self._points)
+        self._scale_vertices(scalar, self._vertices)
 
     
-    def _scale_points(self, scalar, points):
-        for point in points:
-            point.scale(scalar)
+    def _scale_vertices(self, scalar, vertices):
+        for vertex in vertices:
+            vertex.scale(scalar)
 
     
-    def points(self):
-        return self._points
+    def vertices(self):
+        return self._vertices
 
 
     def lines(self):
@@ -56,7 +57,7 @@ class WorldObject:
 def load_model(path_to_json_model):
     with open(path_to_json_model) as file_data:
         json_model = json.load(file_data)
-        nodes = []
+        vertices = []
         lines = []
 
         for json_point in json_model['points']:
@@ -67,7 +68,7 @@ def load_model(path_to_json_model):
                 json_point['z']
             )
 
-            nodes.append(Node(point, key))
+            vertices.append(Vertex(point, key))
         
         for json_line in json_model['lines']:
             vertex1 = json_line['vertex1']
@@ -75,13 +76,13 @@ def load_model(path_to_json_model):
 
             line = []
 
-            for node in nodes:
-                if node.key() == vertex1 or node.key() == vertex2:
-                    line.append(node)
+            for vertex in vertices:
+                if vertex.key() == vertex1 or vertex.key() == vertex2:
+                    line.append(vertex)
 
             lines.append(tuple(line))
         # print(lines)
-        return WorldObject(nodes, lines, scale = 1)
+        return WorldObject(vertices, lines, scale = 1)
 
     
 

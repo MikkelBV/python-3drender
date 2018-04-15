@@ -78,24 +78,24 @@ class ModelTest (unittest.TestCase):
         point = (1, 1)
         key = 'key'
 
-        node = model.Node(point, key)
-        self.assertEqual(node.point(), point)
-        self.assertEqual(node.key(), key)
+        vertex = model.Vertex(point, key)
+        self.assertEqual(vertex.point(), point)
+        self.assertEqual(vertex.key(), key)
     
 
     def test_world_object_runs(self):
         try:
-            world_object = model.WorldObject(points = [], lines = [], scale = 1)
-            self.assertEqual(world_object.points(), [])
+            world_object = model.WorldObject(vertices = [], lines = [], scale = 1)
+            self.assertEqual(world_object.vertices(), [])
         except:
             self.fail()
 
         
     def test_world_object_scales_oninit(self):
-        world_object = model.WorldObject(points = [
-            model.Node((0, 0, 0), None),
-            model.Node((1, 2, 3), None),
-            model.Node((2, 4, 6), None)
+        world_object = model.WorldObject(vertices = [
+            model.Vertex((0, 0, 0), None),
+            model.Vertex((1, 2, 3), None),
+            model.Vertex((2, 4, 6), None)
         ], lines = [], scale = 2)
 
         expected_output = [
@@ -104,7 +104,7 @@ class ModelTest (unittest.TestCase):
             (4, 8, 12)
         ]
         
-        actual_output = [node.point() for node in world_object.points()]
+        actual_output = [node.point() for node in world_object.vertices()]
         self.assertListEqual(actual_output, expected_output)
 
 
@@ -120,11 +120,11 @@ class ModelTest (unittest.TestCase):
     def test_convert_json_to_object(self):
         try:
             world_object = model.load_model('models/test.json')
-            points = world_object.points()
+            points = world_object.vertices()
 
             self.assertTrue(type(world_object) is model.WorldObject)
             self.assertTrue(type(points) is list)
-            self.assertTrue(type(points[0]) is model.Node)
+            self.assertTrue(type(points[0]) is model.Vertex)
             self.assertGreater(len(points), 1)
             self.assertEqual(len(points[0].point()), 3)
 
@@ -149,10 +149,10 @@ class ModelTest (unittest.TestCase):
 
 
     def test_scale_model(self):
-        world_object = model.WorldObject(points = [
-            model.Node((0, 0, 0), None),
-            model.Node((1, 2, 3), None),
-            model.Node((2, 4, 6), None)
+        world_object = model.WorldObject(vertices = [
+            model.Vertex((0, 0, 0), None),
+            model.Vertex((1, 2, 3), None),
+            model.Vertex((2, 4, 6), None)
         ], lines = [], scale = 1)
 
         expected_output = [
@@ -162,7 +162,7 @@ class ModelTest (unittest.TestCase):
         ]
 
         world_object.scale(2)
-        actual_output = [node.point() for node in world_object.points()]
+        actual_output = [vertex.point() for vertex in world_object.vertices()]
         self.assertListEqual(actual_output, expected_output)
 
 
