@@ -6,7 +6,7 @@ import engine
 import model
 from unittest.mock import patch
 
-class engineTest (unittest.TestCase):
+class EngineTest (unittest.TestCase):
 
     @patch("cv2.waitKey", return_value = 0)
     def test_it_runs(self, return_value):
@@ -147,7 +147,7 @@ class ModelTest (unittest.TestCase):
             self.fail()
 
         
-    def test_world_object_scales(self):
+    def test_world_object_scales_oninit(self):
         world_object = model.WorldObject(points = [
             model.Node((0, 0, 0), None),
             model.Node((1, 2, 3), None),
@@ -159,10 +159,9 @@ class ModelTest (unittest.TestCase):
             (2, 4, 6),
             (4, 8, 12)
         ]
-        actual_output = world_object.points()
-
-        for node in actual_output:
-            self.assertIn(node.point(), expected_output)
+        
+        actual_output = [node.point() for node in world_object.points()]
+        self.assertListEqual(actual_output, expected_output)
 
 
     def test_loads_json_model(self):
@@ -204,6 +203,23 @@ class ModelTest (unittest.TestCase):
                 self.assertIn(world_vert1.key(), json_keys)
                 self.assertIn(world_vert2.key(), json_keys)
 
+
+    def test_scale_model(self):
+        world_object = model.WorldObject(points = [
+            model.Node((0, 0, 0), None),
+            model.Node((1, 2, 3), None),
+            model.Node((2, 4, 6), None)
+        ], lines = [], scale = 1)
+
+        expected_output = [
+            (0 , 0, 0),
+            (2, 4, 6),
+            (4, 8, 12)
+        ]
+
+        world_object.scale(2)
+        actual_output = [node.point() for node in world_object.points()]
+        self.assertListEqual(actual_output, expected_output)
 
 
 if __name__ == '__main__':

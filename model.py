@@ -31,6 +31,10 @@ class WorldObject:
         movex, movey, movez = position_change
         self._position = (x + movex, y + movey, z + movez)
 
+
+    def scale(self, scalar):
+        self._scale_points(scalar, self._points)
+
     
     def _scale_points(self, scalar, points):
         for point in points:
