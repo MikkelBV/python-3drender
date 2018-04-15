@@ -17,10 +17,6 @@ def global_to_camera_point(point):
     return tuple(np.subtract(point, CAMERA_POSITION))
 
 
-def map_model_to_screen(world_object):
-    return [point_to_pixel(node.point(), world_object.position()) for node in world_object.points()]
-
-
 def point_to_pixel(point, position):
     x, y, z = global_to_camera_point(point)
     x += position[0]
@@ -31,17 +27,6 @@ def point_to_pixel(point, position):
     screen_y = (WINDOW_HEIGHT / 2) - (FOCAL_LENGTH * y / z)
     
     return int(screen_y), int(screen_x)
-
-
-def is_point_in_frame(canvas, point):
-    y, x = point
-    return y >= 0 and x >= 0 and y < len(canvas) and x < len(canvas[0])
-
-
-def draw_points(canvas, pixels):
-    for pixel in pixels:
-        if is_point_in_frame(canvas, pixel):
-            canvas.itemset(pixel, COLOR_WHITE)
 
 
 def draw_line(canvas, point1, point2, thickness = 1, color = COLOR_WHITE):

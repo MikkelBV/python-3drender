@@ -49,51 +49,6 @@ class EngineTest (unittest.TestCase):
         self.assertEqual(actual_output, expected_output)
 
 
-    def test_draw_runs(self):
-        try: 
-            canvas = np.zeros((engine.WINDOW_HEIGHT, engine.WINDOW_WIDTH), np.uint8)
-            points = [(0, 0), (1, 1), (2, 2)]
-
-            output = engine.draw_points(canvas, points)
-        except:
-            self.fail()
-
-        
-    def test_draw_points_right_numpoints(self):
-        canvas = np.zeros((engine.WINDOW_HEIGHT, engine.WINDOW_WIDTH), np.uint8)
-        points = [(0, 0), (5, 0), (10, 0)]
-        engine.draw_points(canvas, points)
-        num_whites = 0
-        
-        for y in range(engine.WINDOW_HEIGHT):
-            for x in range(engine.WINDOW_WIDTH):
-                if canvas.item(y, x) == engine.COLOR_WHITE:
-                    num_whites += 1
-        
-        self.assertEqual(num_whites, len(points))
-
-
-    def test_is_point_in_frame(self):
-        canvas = np.zeros((5, 5), np.uint8)
-        point1 = (0, 0)
-        point2 = (6, 6)
-
-        output1 = engine.is_point_in_frame(canvas, point1)
-        output2 = engine.is_point_in_frame(canvas, point2)
-
-        self.assertTrue(output1)
-        self.assertFalse(output2)
-
-
-    def test_draw_outside_frame(self):
-        try:
-            points = [(1, 1), (6, 6)]
-            canvas = np.zeros((5, 5), np.uint8)
-            engine.draw_points(canvas, points)
-        except:
-            self.fail(msg = 'trying to draw outside frame')
-
-
     def test_draw_line(self):
         canvas = np.zeros((5, 5), np.uint8)
         engine.draw_line(canvas, (0, 0), (4, 0))
@@ -105,19 +60,6 @@ class EngineTest (unittest.TestCase):
                     self.assertEqual(color, engine.COLOR_WHITE)
                 else:
                     self.assertEqual(color, 0)
-                
-
-    def test_map_model_to_screen(self):
-        world_object = model.WorldObject([
-            model.Node((1, 1, 1), None),
-            model.Node((1, 2, 3), None),
-            model.Node((2, 4, 6), None)
-        ], [])
-        
-        expected_output = [(243, 517), (229, 508), (218, 515)]
-        actual_output = engine.map_model_to_screen(world_object);
-        
-        self.assertEqual(actual_output, expected_output)
 
 
     def test_draw_world_object_runs(self):
@@ -128,6 +70,8 @@ class EngineTest (unittest.TestCase):
         except:
             self.fail(msg = 'could not call draw_world_object()')
         
+
+
 
 class ModelTest (unittest.TestCase):
     def test_node_object(self):
