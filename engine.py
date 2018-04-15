@@ -3,7 +3,6 @@ import numpy as np
 from model import load_model
 import time
 
-
 WINDOW_NAME = 'canvas'
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 500
@@ -69,7 +68,6 @@ def start(loop):
     )
 
     canvas.itemset((int(WINDOW_HEIGHT / 2), int(WINDOW_WIDTH / 2)), COLOR_GRAY)
-    cv2.startWindowThread()
     cv2.namedWindow(WINDOW_NAME)
 
     for i in range(10):

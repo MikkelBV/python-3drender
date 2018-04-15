@@ -22,11 +22,14 @@ class WorldObject:
         self._rotation = rotation
         self._points = points
 
+        # scale the input points according to specified scale
         self._scale_points(scale, points)
 
 
     def translate(self, position_change):
-        self._position = tuple(map(sum, zip(self._position, position_change)))
+        x, y, z = self._position
+        movex, movey, movez = position_change
+        self._position = (x + movex, y + movey, z + movez)
 
     
     def _scale_points(self, scalar, points):

@@ -5,7 +5,7 @@ box.translate((-4, 0, 0))
 
 def loop(canvas):
     draw_world_object(canvas, box)
-    box.translate((1, 0, 0))
+    box.translate((1, 0, 0.1))
 
 if __name__ == '__main__':
     start(loop)
